@@ -1,0 +1,289 @@
+﻿<Page
+    x:Class="BeatBeatFitness.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BeatBeatFitness"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Grid Background="Black" KeyUp="OnKeyboardUp">
+        <MediaElement x:Name="BGMPlayer" AudioCategory="Communications" Source="LetMeHear.mp3" />
+        <MediaElement x:Name="SFXPlayer" AudioCategory="SoundEffects"  AutoPlay="False"/>
+
+
+        <!-- Layer Main -->
+        <Grid x:Name="LayerMain" Visibility="Collapsed" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel x:Name="InputPanel" Grid.Row="1" Grid.Column="0" Visibility="Collapsed" Width="204">
+                <Button Content="Back" Click="OnClickBack"/>
+                <TextBlock Text="Observed Joint angle :" />
+                <TextBlock x:Name="JointLogger" FontSize="18"/>
+                <TextBlock Text="Punching Joint :" />
+                <CheckBox x:Name="head" Content="Head" HorizontalAlignment="Center" Checked="PunchingJointChecked" Unchecked="PunchingJointUnchecked"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <CheckBox x:Name="leftHand" Content="Left Hand" Checked="PunchingJointChecked" Unchecked="PunchingJointUnchecked"/>
+                        <CheckBox x:Name="leftElbow" Content="Left Elbow" Checked="PunchingJointChecked" Unchecked="PunchingJointUnchecked"/>
+                        <CheckBox x:Name="leftKnee" Content="Left Knee" Checked="PunchingJointChecked" Unchecked="PunchingJointUnchecked"/>
+                        <CheckBox x:Name="leftAnkle" Content="Left Ankle" Checked="PunchingJointChecked" Unchecked="PunchingJointUnchecked"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <CheckBox x:Name="rightHand" Content="Right Hand" Checked="PunchingJointChecked" Unchecked="PunchingJointUnchecked"/>
+                        <CheckBox x:Name="rightElbow" Content="Right Elbow" Checked="PunchingJointChecked" Unchecked="PunchingJointUnchecked"/>
+                        <CheckBox x:Name="rightKnee" Content="Right Knee" Checked="PunchingJointChecked" Unchecked="PunchingJointUnchecked"/>
+                        <CheckBox x:Name="rightAnkle" Content="Right Ankle" Checked="PunchingJointChecked" Unchecked="PunchingJointUnchecked"/>
+                    </StackPanel>
+                </Grid>
+                <Button x:Name="EnterNote" Content="Input Note to LIbrary" Click="OnClickInputNote" />
+                <Button x:Name="FinishInput" Content="Finish Input" Click="OnClickFinishInput" />
+
+            </StackPanel>
+            
+            <Viewbox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Image x:Name="colorImage" Width="1360" Height="768" Stretch="Uniform"/>
+            </Viewbox>
+            <Viewbox Grid.Row="1" Grid.Column="1"  HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border BorderBrush="Red" BorderThickness="2">
+                    <Grid  x:Name="DisplayGrid" Background="Transparent" Width="512" Height="385"/>
+                </Border>                
+             </Viewbox>
+
+            <Grid x:Name="SecondPlayerHud" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,50">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Rectangle Grid.RowSpan="2" Fill="#000000" Opacity="0.7" Width="300" Height="150" />
+
+                <TextBlock Grid.Row="0" x:Name="SecondPlayerComboText" Text="Combo x300" FontSize="34" HorizontalAlignment="Right"  Style="{StaticResource MainUITextBlock}"/>
+                <TextBlock Grid.Row="1" x:Name="SecondPlayerScoreText" Text="19237728" FontSize="40" HorizontalAlignment="Right" Style="{StaticResource MainUITextBlock}" />
+            </Grid>
+
+            <Grid x:Name="FirstPlayerHud" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,50">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Rectangle Grid.RowSpan="2" Fill="#000000" Opacity="0.7" Width="300" Height="150" />
+                <TextBlock Grid.Row="0" x:Name="FirstPlayerComboText" Text="Combo x300" FontSize="34" HorizontalAlignment="Left" Style="{StaticResource MainUITextBlock}"  />
+                <TextBlock Grid.Row="1" x:Name="FirstPlayerScoreText" Text="19237728" FontSize="40" HorizontalAlignment="Left"  Style="{StaticResource MainUITextBlock}"  />
+            </Grid>
+
+            <!--Game HUD layer-->
+            <Grid  x:Name="MultiplayerHud" Grid.ColumnSpan="3" Grid.RowSpan="3">
+                <Rectangle Fill="#000000" Opacity="0.8" Stretch="UniformToFill" Grid.ColumnSpan="1" Grid.RowSpan="1" Margin="0,0,0,634"/>
+                <Slider x:Name="MultiPlayerSlider" Background="#83AF9B" Foreground="#C02942" Value="50" HorizontalAlignment="Center" BorderThickness="5" BorderBrush="#F9CDAD" VerticalAlignment="Top" Width="800" Margin="40" />
+                <StackPanel HorizontalAlignment="Left" Margin="80,20">
+                    <TextBlock Text="Second" FontSize="40" FontWeight="Bold" Foreground="#C02942" FontFamily="Nexa" HorizontalAlignment="Center" />
+                    <TextBlock Text="Player" FontSize="40" FontWeight="Bold" Foreground="#C02942" FontFamily="Nexa" HorizontalAlignment="Center" />
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Right" Margin="80,20">
+                    <TextBlock Text="First" FontSize="40" FontWeight="Bold" Foreground="#83AF9B" FontFamily="Nexa" HorizontalAlignment="Center" />
+                    <TextBlock Text="Player" FontSize="40" FontWeight="Bold" Foreground="#83AF9B" FontFamily="Nexa" HorizontalAlignment="Center" />
+                </StackPanel>
+            </Grid>
+
+            <Grid  x:Name="ChallengeHud" Grid.ColumnSpan="3" Grid.RowSpan="3">
+                <Rectangle Fill="#000000" Opacity="0.8" Stretch="UniformToFill" Grid.ColumnSpan="1" Grid.RowSpan="1" Margin="0,0,1250,0"/>
+                <Slider x:Name="ChallengeSlider" Background="#542437" Foreground="#69D2E7" Value="100"  HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Vertical" Height="500"  Margin="40"/>
+                <TextBlock Text="Challenge Gauge" Foreground="#0B486B" FontFamily="Nexa" FontSize="35" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" Height="96"  UseLayoutRounding="False" d:LayoutRounding="Auto" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="-79.5,340.5,0,331.5" >
+                    <TextBlock.RenderTransform>
+                        <CompositeTransform Rotation="-90"/>
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+            </Grid>
+
+        </Grid>
+
+        <!--Init Layer-->
+        <Grid x:Name="InitLayer" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="7*"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+            <Rectangle Fill="#000000" Opacity="0.6" Stretch="UniformToFill" Grid.ColumnSpan="3" Grid.RowSpan="3"/>
+
+            <StackPanel Grid.Row="0" VerticalAlignment="Bottom">
+                <TextBlock Text="Are You Ready?" Foreground="#EFBEFE" FontWeight="Bold" FontFamily="Nexa" FontSize="100" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <Image Width="200" Source="Assets/UI/raise.png"  />
+                <TextBlock Text="Raise Your Hand !" Foreground="#EFBEFE" FontSize="70" FontFamily="Nexa" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </StackPanel>
+
+
+            <Rectangle Grid.Row="1" Fill="#000000" Opacity="0.5" Stretch="Fill" Width="551" Height="140" HorizontalAlignment="Left" Margin="0,16,0,15"/>
+            <StackPanel Grid.Row="1" HorizontalAlignment="Left" Orientation="Horizontal"  >
+                <Image Source="Assets/UI/clap.png" Margin="-10,30"/>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="clap your hands over your head " FontFamily="Nexa" VerticalAlignment="Center" FontSize="30" Foreground="#EFBEFE"/>
+                    <TextBlock Text="to pause the game" VerticalAlignment="Center"  FontFamily="Nexa" Foreground="#EFBEFE" FontSize="30"/>
+                </StackPanel>
+            </StackPanel>
+
+        </Grid>
+
+        <!--Layer Pause-->
+        <Grid x:Name="PauseLayer" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="4*" />
+                <RowDefinition Height="2*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Rectangle x:Name="Overlay" Fill="#000000" Opacity="0.7" Stretch="UniformToFill" Grid.ColumnSpan="3" Grid.RowSpan="3"/>
+
+            <TextBlock Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="0" Text="PAUSED" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#EFBEFE" FontWeight="Bold" FontFamily="Nexa" FontSize="80" />
+
+
+            <Button Grid.Column="1" Grid.Row="1" Content="Back" Click="OnClickExit" Width="260" Height="260" Margin="20" FontSize="42" Style="{StaticResource MenuButton}">
+                <Button.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.6"/>
+                </Button.Background>
+            </Button>
+            <Button Grid.Column="0" Grid.Row="1" Content="Restart" Click="OnClickRestart" Width="260" Height="260" Margin="20" FontSize="42" HorizontalAlignment="Right" Style="{StaticResource MenuButton}">
+                <Button.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.6"/>
+                </Button.Background>
+            </Button>
+            <TextBlock Grid.Column="2" Grid.Row="1" Text="Volume" VerticalAlignment="Center" FontFamily="Nexa" Foreground="#EFBEFE" FontWeight="Bold" FontSize="42" Margin="70"/>
+            <Slider Grid.Column="2" Grid.Row="1" x:Name="VolumeSlider" Foreground="#FD5EFB" Minimum="0" Maximum="10" Background="#EFBEFE" Orientation="Vertical" TickFrequency="2" HorizontalAlignment="Center" ValueChanged="VolumeAdjusting"/>
+
+            <Button Grid.Column="2" Grid.Row="2" Content="Cheat" Click="OnClickFinishCheat" Width="150" Height="150" Margin="5" FontSize="38" HorizontalAlignment="Right" Style="{StaticResource MenuButton}"/>
+
+            <Rectangle Grid.Row="2" Fill="#000000" Opacity="0.5" Stretch="Fill" Width="553" Height="140" HorizontalAlignment="Left" Grid.ColumnSpan="2" Margin="0,16,0,15"/>
+            <StackPanel Grid.Row="3" Grid.ColumnSpan="3" HorizontalAlignment="Left" Orientation="Horizontal"  >
+                <Image Source="Assets/UI/clap.png" Margin="-10,30"/>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="clap your hands over your head " FontFamily="Nexa" VerticalAlignment="Center" FontSize="30" Foreground="#EFBEFE"/>
+                    <TextBlock Text="to resume the game" VerticalAlignment="Center"  FontFamily="Nexa" Foreground="#EFBEFE" FontSize="30"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <!--Layer End-->
+        <Grid x:Name="EndLayer" Visibility="Visible">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.6*" />
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Rectangle Fill="#000000" Opacity="0.8" Stretch="UniformToFill" Grid.ColumnSpan="3" Grid.RowSpan="4"/>
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="5" x:Name="MusicDetailText" Text="let me hear (130Bpm) challenge hard" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" FontFamily="Nexa" Foreground="#EFBEFE"/>
+
+            <Grid Grid.Row="1" Grid.Column="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock  Grid.Row="1" Text="Max Combo" Style="{StaticResource EndUIMiddleTextBlock}"/>
+                <TextBlock  Grid.Row="2" Text="Perfect"   Style="{StaticResource EndUIMiddleTextBlock}"/>
+                <TextBlock  Grid.Row="3" Text="Great"     Style="{StaticResource EndUIMiddleTextBlock}"/>
+                <TextBlock  Grid.Row="4" Text="Cool"      Style="{StaticResource EndUIMiddleTextBlock}"/>
+                <TextBlock  Grid.Row="5" Text="Bad"       Style="{StaticResource EndUIMiddleTextBlock}"/>
+                <TextBlock  Grid.Row="6" Text="Miss"      Style="{StaticResource EndUIMiddleTextBlock}"/>
+            </Grid>
+
+            <Grid x:Name="SecondPlayerScoreReport" Grid.Row="1" Grid.Column="0" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="1" Text="{Binding maxCombo}"     Style="{StaticResource EndUILeftTextBlock}"/>
+                <TextBlock Grid.Row="2" Text="{Binding perfectNumber}" Style="{StaticResource EndUILeftTextBlock}"/>
+                <TextBlock Grid.Row="3" Text="{Binding greatNumber}"  Style="{StaticResource EndUILeftTextBlock}"/>
+                <TextBlock Grid.Row="4" Text="{Binding coolNumber}"   Style="{StaticResource EndUILeftTextBlock}"/>
+                <TextBlock Grid.Row="5" Text="{Binding badNumber}"    Style="{StaticResource EndUILeftTextBlock}"/>
+                <TextBlock Grid.Row="6" Text="{Binding missNumber}"    Style="{StaticResource EndUILeftTextBlock}"/>
+
+                <TextBlock Grid.Column="0" Grid.Row="1" FontSize="38" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding isNewHighScore}" Foreground="#FA6900"/>
+                <TextBlock Grid.Column="0" Grid.Row="2" Grid.RowSpan="4" FontSize="200" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding predicateLetter}" Foreground="#FA6900" />
+                <TextBlock Grid.Column="0" Grid.Row="6" FontSize="50" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding currentScore}" Foreground="#FA6900"/>
+            </Grid>
+
+            <Grid x:Name="FirstPlayerScoreReport" Grid.Row="1" Grid.Column="3" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="4*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="1" Text="{Binding maxCombo}"     Style="{StaticResource EndUIRightTextBlock}" />
+                <TextBlock Grid.Row="2" Text="{Binding perfectNumber}" Style="{StaticResource EndUIRightTextBlock}" />
+                <TextBlock Grid.Row="3" Text="{Binding greatNumber}"   Style="{StaticResource EndUIRightTextBlock}" />
+                <TextBlock Grid.Row="4" Text="{Binding coolNumber}"    Style="{StaticResource EndUIRightTextBlock}" />
+                <TextBlock Grid.Row="5" Text="{Binding badNumber}"     Style="{StaticResource EndUIRightTextBlock}" />
+                <TextBlock Grid.Row="6" Text="{Binding missNumber}"    Style="{StaticResource EndUIRightTextBlock}" />
+
+                <TextBlock Grid.Column="1" Grid.Row="1" FontSize="38" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding isNewHighScore}" Foreground="#EFBEFE" FontFamily="Nexa"/>
+                <TextBlock Grid.Column="1" Grid.Row="2" Grid.RowSpan="4" FontSize="200" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding predicateLetter}" Foreground="#EFBEFE" FontFamily="Nexa"/>
+                <TextBlock Grid.Column="1" Grid.Row="6" FontSize="50" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding currentScore}" Foreground="#EFBEFE" FontFamily="Nexa"/>
+            </Grid>
+
+            <Button Grid.Column="1" Grid.Row="2"  Content="Back" Click="OnClickExit" Width="208" Height="208" Margin="20" FontSize="42" Style="{StaticResource MenuButton}">
+                <Button.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.6"/>
+                </Button.Background>
+            </Button>
+            <Button Grid.Column="0" Grid.Row="2"  Content="Replay" Click="OnClickRestart" Width="208" Height="208" Margin="20" FontSize="42" HorizontalAlignment="Right" Style="{StaticResource MenuButton}" >
+                <Button.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.6"/>
+                </Button.Background>
+            </Button>
+            <Button Grid.Column="2" Grid.Row="2"  Content="Share" Width="208" Height="208" Margin="20" FontSize="42" HorizontalAlignment="Left" Style="{StaticResource MenuButton}" >
+                <Button.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.6"/>
+                </Button.Background>
+            </Button>
+            
+            <Grid Grid.Column="0" Grid.Row="3">
+                <TextBlock x:Name="calBurned" Text="Calories Burned : 8.4 MET min" Style="{StaticResource EndUIMiddleTextBlock}" Margin="10" HorizontalAlignment="Left" FontSize="30"/>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</Page>
