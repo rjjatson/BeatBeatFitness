@@ -15,7 +15,9 @@ download the build on windows store
 ## Prerequisites
 
 *Installed Kinect 2.0 for windows (could be replaced by dummy input)
+
 *Kinect 2.0 SDK
+
 *.mp4 musics *that have beat-per-minutes meta data*
 
 ## Deployment
